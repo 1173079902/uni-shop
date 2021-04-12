@@ -10,6 +10,12 @@
         </navigator>
       </swiper-item>
     </swiper>
+    <!-- 分类导航区域 -->
+    <view class="nav-list">
+      <view class="nav-item" v-for="(item, i) in navList" :key="i">
+        <image :src="item.image_src" class="nav-img"></image>
+      </view>
+    </view>
   </view>
 </template>
 
@@ -19,24 +25,29 @@
       return {
         // 1. 轮播图的数据列表，默认为空数组
         swiperList: [],
+        navList :[]
       }
     },
     onLoad() {
       // 2. 在小程序页面刚加载的时候，调用获取轮播图数据的方法
-      this.getSwiperList()
+      this.getSwiperList(),
+      this.getNavList()
     },
     methods: {
       // 3. 获取轮播图数据的方法
       async getSwiperList() {
         // 3.1 发起请求
-        const {
-          data: res
-        } = await uni.$http.get('/api/public/v1/home/swiperdata')
+        const {data: res} = await uni.$http.get('/api/public/v1/home/swiperdata')
         // 3.2 请求失败
-        if (res.meta.status !== 200) return uni.$showToast()
+        if (res.meta.status !== 200) return uni.showMsg()
         // 3.3 请求成功，为 data 中的数据赋值
         this.swiperList = res.message
       },
+      async getNavList() {
+        const {data: res} = await uni.$http.get('/api/public/v1/home/catitems')
+        if(res.meta.status !== 200) return uni.showMsg()
+        this.navList = res.message
+      }
     },
   }
 </script>
@@ -44,11 +55,20 @@
 <style lang="scss">
   swiper {
     height: 330rpx;
+    .swiper-item,
+    image {
+      width: 100%;
+      height: 100%;
+    }
   }
-
-  .swiper-item,
-  image {
-    width: 100%;
-    height: 100%;
+  .nav-list {
+    display: flex;
+    justify-content: space-around;
+    margin: 15px 0;
+    
+      .nav-img {
+        width: 128rpx;
+        height: 140rpx;
+      }
   }
 </style>
