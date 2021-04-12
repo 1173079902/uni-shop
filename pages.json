@@ -14,12 +14,12 @@
   }],
   "globalStyle": {
     "navigationBarTextStyle": "white",
-    "navigationBarTitleText": "黑马优购",
-    "navigationBarBackgroundColor": "#C00000",
+    "navigationBarTitleText": "天空蔚蓝",
+    "navigationBarBackgroundColor": "#1890ff",
     "backgroundColor": "#FFFFFF"
   },
   "tabBar": {
-    "selectedColor": "#C00000",
+    "selectedColor": "#1890ff",
     "list": [{
         "pagePath": "pages/home/home",
         "text": "首页",
