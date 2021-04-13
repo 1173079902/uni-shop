@@ -1,5 +1,6 @@
 <template>
   <view>
+    <my-search></my-search>
     <view class="scroll-view-container">
       <!-- 左侧的滚动视图区域 -->
       <scroll-view class="left-scroll-view" scroll-y :style="{height: wh + 'px'}">
