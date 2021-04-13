@@ -4,61 +4,16 @@
       <!-- 左侧的滚动视图区域 -->
       <scroll-view class="left-scroll-view" scroll-y :style="{height: wh + 'px'}">
         <block v-for="(item, i) in cateList" :key="i">
-          <view :class="['left-scroll-view-item', i === active ? 'active' : '']" @click="activeChanged(i)">{{item.cat_name}}</view>
+          <view :class="['left-scroll-view-item', i === active ? 'active' : '']" @click="activeChanged(i)">
+            {{item.cat_name}}
+          </view>
         </block>
       </scroll-view>
       <!-- 右侧的滚动视图区域 -->
       <scroll-view class="right-scroll-view" scroll-y :style="{height: wh + 'px'}">
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
-        <view class="left-scroll-view-item">zzz</view>
+        <view class="cate-lv2" v-for="(item2, i2) in cateLevel2" :key="i2">
+          <view class="cate-lv2-title">/ {{item2.cat_name}} /</view>
+        </view>
       </scroll-view>
     </view>
   </view>
@@ -72,7 +27,9 @@
         // 分类数据列表
         cateList: [],
         // 当前选中项的索引，默认让第一项被选中
-        active: 0
+        active: 0,
+        // 二级分类列表
+        cateLevel2: []
       };
     },
     onLoad() {
@@ -91,9 +48,12 @@
         if (res.meta.status !== 200) return uni.$showMsg()
         // 转存数据
         this.cateList = res.message
+        // 存储二级分类
+        this.cateLevel2 = res.message[0].children
       },
       activeChanged(i) {
         this.active = i
+        this.cateLevel2 = this.cateList[i].children
       }
     }
   }
@@ -133,4 +93,11 @@
       }
     }
   }
+  
+  .cate-lv2-title {
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    padding: 15px 0;
+    }
 </style>
