@@ -18,7 +18,7 @@
       </view>
       <!-- 列表区域 -->
       <view class="history-list">
-        <uni-tag :text="item" v-for="(item, i) in historyList" :key="i"></uni-tag>
+        <uni-tag :text="item" v-for="(item, i) in historys" :key="i"></uni-tag>
       </view>
     </view>
   </view>
@@ -54,12 +54,24 @@
         const {data: res} = await uni.$http.get('/api/public/v1/goods/qsearch', {query: this.kw})
         if(res.meta.status !== 200) return uni.$showMsg()
         this.searchResults = res.message
+        // 1. 查询到搜索建议之后，调用 saveSearchHistory() 方法保存搜索关键词
+        this.saveSearchHistory()
       },
       gotoDetail(goods_id) {
         uni.navigateTo({
           // 指定详情页面的 URL 地址，并传递 goods_id 参数
           url: '/subpkg/goods_detail/goods_detail?goods_id=' + goods_id
         })
+      },
+      // 2. 保存搜索关键词的方法
+      saveSearchHistory() {
+          // 2.1 直接把搜索关键词 push 到 historyList 数组中
+          this.historyList.push(this.kw)
+        }
+    },
+    computed: {
+      historys() {
+        return [...this.historyList].reverse()
       }
     }
   }
