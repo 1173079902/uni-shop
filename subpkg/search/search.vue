@@ -3,14 +3,14 @@
     <!-- 使用 uni-ui 提供的搜索组件 -->
     <uni-search-bar @input="input" :radius="100" cancelButton="none"></uni-search-bar>
     <!-- 搜索建议列表 -->
-    <view class="sugg-list">
+    <view class="sugg-list" v-if="searchResults.length !== 0">
       <view class="sugg-item" v-for="(item, i) in searchResults" :key="i" @click="gotoDetail(item.goods_id)">
         <view class="goods-name">{{item.goods_name}}</view>
         <uni-icons type="arrowright" size="16"></uni-icons>
       </view>
     </view>
     <!-- 搜索历史 -->
-    <view class="history-box">
+    <view class="history-box" v-else>
       <!-- 标题区域 -->
       <view class="history-title">
         <text>搜索历史</text>
