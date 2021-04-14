@@ -39,18 +39,28 @@
     },
     methods: {
       // 获取商品列表数据的方法
-      async getGoodsList() {
+      async getGoodsList(cd) {
         this.isloading = true
         // 发起请求
         const {
           data: res
         } = await uni.$http.get('/api/public/v1/goods/search', this.queryObj)
         this.isloading = false
+        // 只要数据请求完毕，就立即按需调用 cb 回调函数
+        cd && cd()
         if (res.meta.status !== 200) return uni.$showMsg()
         // 为数据赋值
         this.goodsList = [...this.goodsList, ...res.message.goods]
         this.total = res.message.total
       }
+    },
+    onPullDownRefresh() {
+      this.queryObj.pagenum = 1
+      this.total = 0
+      this.isloading = false
+      this.goodsList = []
+      
+      this.getGoodsList(() => uni.stopPullDownRefresh())
     },
     onReachBottom() {
       if(this.queryObj.pagenum * this.queryObj.pagesize >= this.total) return uni.$showMsg('数据加载完毕！')
