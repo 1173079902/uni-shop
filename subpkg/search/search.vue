@@ -9,12 +9,18 @@
   export default {
     data() {
       return {
-
+        // 延时器的 timerId
+        timer: null,
+        // 搜索关键词
+        kw: ''
       };
     },
     methods: {
       input(e) {
-        console.log(e)
+        clearTimeout(this.timer)
+        this.timer = setTimeout(() => {
+          this.kw = e
+        }, 500)
       }
     }
   }
