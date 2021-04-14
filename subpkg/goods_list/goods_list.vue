@@ -53,6 +53,7 @@
       }
     },
     onReachBottom() {
+      if(this.queryObj.pagenum * this.queryObj.pagesize >= this.total) return uni.$showMsg('数据加载完毕！')
       // 判断是否正在请求其它数据，如果是，则不发起额外的请求
       if (this.isloading) return
       this.queryObj.pagenum += 1
