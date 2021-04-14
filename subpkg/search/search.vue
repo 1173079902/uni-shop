@@ -12,7 +12,9 @@
         // 延时器的 timerId
         timer: null,
         // 搜索关键词
-        kw: ''
+        kw: '',
+        // 搜索结果列表
+        searchResults: []
       };
     },
     methods: {
@@ -20,7 +22,17 @@
         clearTimeout(this.timer)
         this.timer = setTimeout(() => {
           this.kw = e
+          this.getSearchList()
         }, 500)
+      },
+      async getSearchList() {
+        if(this.kw === '') {
+          this.searchResults = []
+          return
+        }
+        const {data: res} = await uni.$http.get('/api/public/v1/goods/qsearch', {query: this.kw})
+        if(res.meta.status !== 200) return uni.$showMsg()
+        this.searchResults = res.message
       }
     }
   }
