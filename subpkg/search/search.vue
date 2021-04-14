@@ -14,11 +14,11 @@
       <!-- 标题区域 -->
       <view class="history-title">
         <text>搜索历史</text>
-        <uni-icons type="trash" size="17"></uni-icons>
+        <uni-icons type="trash" size="17" @click="cleanHistory"></uni-icons>
       </view>
       <!-- 列表区域 -->
       <view class="history-list">
-        <uni-tag :text="item" v-for="(item, i) in historys" :key="i"></uni-tag>
+        <uni-tag :text="item" v-for="(item, i) in historys" :key="i" @click="gotoGoodsList(item)"></uni-tag>
       </view>
     </view>
   </view>
@@ -37,6 +37,9 @@
         // 搜索关键词的历史记录
         historyList: ['a', 'app', 'apple']
       };
+    },
+    onLoad() {
+      this.historyList = JSON.parse(uni.getStorageSync('kw') || '[]')
     },
     methods: {
       input(e) {
@@ -64,14 +67,31 @@
         })
       },
       // 2. 保存搜索关键词的方法
+      // 保存搜索关键词为历史记录
       saveSearchHistory() {
-          // 2.1 直接把搜索关键词 push 到 historyList 数组中
-          // this.historyList.push(this.kw)
-          const set = new Set(this.historyList)
-           set.delete(this.kw)
-           set.add(this.kw)
-           this.historyList = Array.from(set)
-        }
+        // this.historyList.push(this.kw)
+        // 1. 将 Array 数组转化为 Set 对象
+        const set = new Set(this.historyList)
+        // 2. 调用 Set 对象的 delete 方法，移除对应的元素
+        set.delete(this.kw)
+        // 3. 调用 Set 对象的 add 方法，向 Set 中添加元素
+        set.add(this.kw)
+        // 4. 将 Set 对象转化为 Array 数组
+        this.historyList = Array.from(set)
+        // 储存到本地
+        uni.setStorageSync('kw', JSON.stringify(this.historyList))
+      },
+      cleanHistory() {
+        // 清空 data 中保存的搜索历史
+        this.historyList = []
+        // 清空本地存储中记录的搜索历史
+        uni.setStorageSync('kw', '[]')
+      },
+      gotoGoodsList(kw) {
+        uni.navigateTo({
+          url: '/subpkg/goods_list/goods_list?query=' + kw
+        })
+      }
     },
     computed: {
       historys() {
