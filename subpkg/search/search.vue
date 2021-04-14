@@ -66,7 +66,11 @@
       // 2. 保存搜索关键词的方法
       saveSearchHistory() {
           // 2.1 直接把搜索关键词 push 到 historyList 数组中
-          this.historyList.push(this.kw)
+          // this.historyList.push(this.kw)
+          const set = new Set(this.historyList)
+           set.delete(this.kw)
+           set.add(this.kw)
+           this.historyList = Array.from(set)
         }
     },
     computed: {
